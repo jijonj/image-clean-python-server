@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Dashboard</title>
+    <script>
+        async function uploadImage() {
+            const input = document.getElementById("imageInput");
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            location.reload();
+        }
+    </script>
+</head>
+<body>
+    <h1>Image Dashboard</h1>
+    <input type="file" id="imageInput" accept="image/*">
+    <button onclick="uploadImage()">Upload</button>
+    <h2>Uploaded Images</h2>
+    <div id="imageList">
+        {% for image in images %}
+        <div>
+            <img src="/api/{{ image }}" alt="{{ image }}" style="max-width: 200px; max-height: 200px;">
+            <p>{{ image }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
